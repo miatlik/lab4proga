@@ -150,12 +150,12 @@ class BlackjackGame {
             opponent.ruka(deck.viborkarti());
             opponent.ruka(deck.viborkarti());
             // Основная игра
-            while (playAgain1 || playAgain2) {
+            while (playAgain1==true || playAgain2==true) {
                 // Отображение карт
                 player.myvivod();
                 opponent.opvivodhide();
                 //Выбор игрока
-                if (playAgain1) {
+                if (playAgain1==true) {
                     System.out.println("\nНажмите 1, чтобы тянуть карту");
                     System.out.println("Нажмите 2, чтобы спасовать");
                     int choice = getPlayerChoice();
@@ -165,21 +165,21 @@ class BlackjackGame {
                     }
                     else if(choice == 2 || player.getTotalValue() > 21){
                         System.out.println("Вы спасовали");
-                        playAgain1=!playAgain1;
+                        playAgain1=false;
                     }
                 }
                 // Выбор противника
-                if(playAgain2) {
+                if(playAgain2==true) {
                     if (opponent.reshenie_ai()) {
                         opponent.ruka(deck.viborkarti());
                     } else {
                         System.out.println("\nПротивник спасовал");
-                        playAgain2 = !playAgain2;
+                        playAgain2 = false;
                     }
                 }
             }
             // Вывод результатов
-            if (!playAgain1 && !playAgain2) {
+            if (playAgain1==false && playAgain2==false) {
                 player.myvivod(); // Полное отображение карт игрока
                 opponent.opvivodopen(); // Полное отображение карт противника
                 // Оценка игры
