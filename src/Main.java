@@ -131,3 +131,77 @@ class Player {
         return this.getTotalValue() < 17; // Возвращаем true (взять карту) или false (остановиться)
     }
 }
+class BlackjackGame {
+    private static final int MAX_CARDS = 11; // Максимальное количество карт
+    private static Scanner scanner = new Scanner(System.in);
+    private static Random random = new Random();
+    public static void main(String[] args) {
+        char ch;
+        do {
+            boolean playAgain1 = true;
+            boolean playAgain2 = true;
+            Deck deck = new Deck();
+            Player player = new Player(); // Игрок
+            Player opponent = new Player(); // Противник
+            deck.vvodkolodi();
+            // Начальная раздача карт
+            player.ruka(deck.viborkarti());
+            player.ruka(deck.viborkarti());
+            opponent.ruka(deck.viborkarti());
+            opponent.ruka(deck.viborkarti());
+            // Основная игра
+            while (playAgain1 || playAgain2) {
+                // Отображение карт
+                player.myvivod();
+                opponent.opvivodhide();
+                //Выбор игрока
+                if (playAgain1) {
+                    System.out.println("\nНажмите 1, чтобы тянуть карту");
+                    System.out.println("Нажмите 2, чтобы спасовать");
+                    int choice = getPlayerChoice();
+
+                    if (choice == 1 && player.getTotalValue() <= 21) {
+                        player.ruka(deck.viborkarti());
+                    }
+                    else if(choice == 2 || player.getTotalValue() > 21){
+                        System.out.println("Вы спасовали");
+                        playAgain1=!playAgain1;
+                    }
+                }
+                // Выбор противника
+                if(playAgain2) {
+                    if (opponent.reshenie_ai()) {
+                        opponent.ruka(deck.viborkarti());
+                    } else {
+                        System.out.println("\nПротивник спасовал");
+                        playAgain2 = !playAgain2;
+                    }
+                }
+            }
+            // Вывод результатов
+            if (!playAgain1 && !playAgain2) {
+                player.myvivod(); // Полное отображение карт игрока
+                opponent.opvivodopen(); // Полное отображение карт противника
+                // Оценка игры
+                player.vivodrez(opponent);
+            }
+            System.out.println("\nНажмите q, чтобы выйти или любую другую клавишу, чтобы сыграть заново");
+            ch = scanner.nextLine().charAt(0);
+        } while (ch != 'q');
+    }
+    //Обработка ошибок
+    private static int getPlayerChoice() {
+        int choice;
+        while (true) {
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+                if (choice < 1 || choice > 2) {
+                    throw new NumberFormatException();
+                }
+                return choice;
+            } catch (NumberFormatException e) {
+                System.out.println("Ошибка. Выберите 1 или 2: ");
+            }
+        }
+    }
+}
